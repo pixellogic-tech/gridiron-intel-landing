@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gridiron Intel - Coach Dashboard</title>
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="logo">🏈</span>
+            <h3>Gridiron Intel</h3>
+        </div>
+        
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <div class="user-name" id="userName">Coach Name</div>
+                <div class="user-role" id="userRole">Head Coach</div>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" onclick="showSection('overview')">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('players')">
+                <i class="fas fa-users"></i>
+                <span>Players</span>
+                <span class="badge" id="playerCount">0</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('films')">
+                <i class="fas fa-video"></i>
+                <span>Film Room</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('predictions')">
+                <i class="fas fa-brain"></i>
+                <span>AI Predictions</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('tendencies')">
+                <i class="fas fa-chart-line"></i>
+                <span>Tendencies</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('schedule')">
+                <i class="fas fa-calendar"></i>
+                <span>Schedule</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <button onclick="logout()" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="topbar-title" id="sectionTitle">Dashboard Overview</div>
+            
+            <div class="topbar-actions">
+                <button class="btn-notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <button class="btn-primary-small" onclick="showSection('upload')">
+                    <i class="fas fa-upload"></i>
+                    Upload Film
+                </button>
+            </div>
+        </div>
+        
+        <!-- Dashboard Sections -->
+        <div class="content-wrapper">
+            
+            <!-- Overview Section -->
+            <div id="overview-section" class="content-section active">
+                <div class="welcome-banner">
+                    <h1>Welcome back, <span id="coachName">Coach</span>!</h1>
+                    <p>Here's what's happening with your team today</p>
+                </div>
+                
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-number" id="totalPlayers">0</div>
+                            <div class="stat-label">Total Players</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-number" id="totalFilms">0</div>
+                            <div class="stat-label">Game Films</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-number">87%</div>
+                            <div class="stat-label">AI Accuracy</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-number" id="winRate">0-0</div>
+                            <div class="stat-label">Season Record</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <h3>Play Tendency Analysis</h3>
+                        <canvas id="tendencyChart"></canvas>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>Weekly Activity</h3>
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="activity-card">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-list" id="activityList">
+                        <!-- Activities will be added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Players Section -->
+            <div id="players-section" class="content-section">
+                <div class="section-header">
+                    <h2>Team Roster</h2>
+                    <button class="btn-primary" onclick="showAddPlayerModal()">
+                        <i class="fas fa-user-plus"></i>
+                        Add Player
+                    </button>
+                </div>
+                
+                <div class="players-grid" id="playersGrid">
+                    <!-- Players will be added here -->
+                </div>
+            </div>
+            
+            <!-- Films Section -->
+            <div id="films-section" class="content-section">
+                <div class="section-header">
+                    <h2>Game Films</h2>
+                    <button class="btn-primary" onclick="showUploadModal()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Upload Film
+                    </button>
+                </div>
+                
+                <div class="films-list" id="filmsList">
+                    <!-- Films will be listed here -->
+                </div>
+            </div>
+            
+            <!-- Predictions Section -->
+            <div id="predictions-section" class="content-section">
+                <div class="section-header">
+                    <h2>AI Play Predictions</h2>
+                </div>
+                
+                <div class="prediction-form">
+                    <h3>Enter Game Situation</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Down</label>
+                            <select id="predDown">
+                                <option value="1">1st Down</option>
+                                <option value="2">2nd Down</option>
+                                <option value="3">3rd Down</option>
+                                <option value="4">4th Down</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Distance</label>
+                            <input type="number" id="predDistance" min="1" max="99" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label>Field Position</label>
+                            <select id="predFieldPos">
+                                <option value="own20">Own 20</option>
+                                <option value="midfield">Midfield</option>
+                                <option value="redzone">Red Zone</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Time Remaining</label>
+                            <select id="predTime">
+                                <option value="q1">1st Quarter</option>
+                                <option value="q2">2nd Quarter</option>
+                                <option value="q3">3rd Quarter</option>
+                                <option value="q4">4th Quarter</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="generatePrediction()">
+                        <i class="fas fa-magic"></i>
+                        Generate Prediction
+                    </button>
+                </div>
+                
+                <div id="predictionResult" class="prediction-result" style="display: none;">
+                    <!-- Prediction will appear here -->
+                </div>
+            </div>
+            
+            <!-- Tendencies Section -->
+            <div id="tendencies-section" class="content-section">
+                <div class="section-header">
+                    <h2>Opponent Tendencies</h2>
+                </div>
+                
+                <div class="tendencies-grid">
+                    <div class="tendency-card">
+                        <h4>Down & Distance</h4>
+                        <div class="tendency-stat">
+                            <span>1st & 10:</span>
+                            <strong>65% Run</strong>
+                        </div>
+                        <div class="tendency-stat">
+                            <span>3rd & Short:</span>
+                            <strong>78% Run</strong>
+                        </div>
+                        <div class="tendency-stat">
+                            <span>3rd & Long:</span>
+                            <strong>85% Pass</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="tendency-card">
+                        <h4>Formation Tendencies</h4>
+                        <div class="tendency-stat">
+                            <span>I-Formation:</span>
+                            <strong>82% Run</strong>
+                        </div>
+                        <div class="tendency-stat">
+                            <span>Shotgun:</span>
+                            <strong>71% Pass</strong>
+                        </div>
+                        <div class="tendency-stat">
+                            <span>Empty:</span>
+                            <strong>95% Pass</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="tendency-card">
+                        <h4>Red Zone</h4>
+                        <div class="tendency-stat">
+                            <span>Inside 10:</span>
+                            <strong>60% Run</strong>
+                        </div>
+                        <div class="tendency-stat">
+                            <span>Goal Line:</span>
+                            <strong>75% Run</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Schedule Section -->
+            <div id="schedule-section" class="content-section">
+                <div class="section-header">
+                    <h2>Season Schedule</h2>
+                    <button class="btn-primary" onclick="addGame()">
+                        <i class="fas fa-plus"></i>
+                        Add Game
+                    </button>
+                </div>
+                
+                <div class="schedule-list" id="scheduleList">
+                    <!-- Schedule will be listed here -->
+                </div>
+            </div>
+            
+            <!-- Settings Section -->
+            <div id="settings-section" class="content-section">
+                <div class="section-header">
+                    <h2>Settings</h2>
+                </div>
+                
+                <div class="settings-form">
+                    <div class="settings-group">
+                        <h3>Team Information</h3>
+                        <div class="form-group">
+                            <label>School Name</label>
+                            <input type="text" id="schoolName" placeholder="Enter school name">
+                        </div>
+                        <div class="form-group">
+                            <label>Team Name</label>
+                            <input type="text" id="teamName" placeholder="Enter team name">
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>Coach Information</h3>
+                        <div class="form-group">
+                            <label>Coach Name</label>
+                            <input type="text" id="coachNameSetting" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="coachEmail" placeholder="Enter email">
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="saveSettings()">
+                        <i class="fas fa-save"></i>
+                        Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div id="addPlayerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addPlayerModal')">&times;</span>
+            <h2>Add New Player</h2>
+            <form onsubmit="addPlayer(event)">
+                <div class="form-group">
+                    <label>Player Name</label>
+                    <input type="text" id="playerName" required>
+                </div>
+                <div class="form-group">
+                    <label>Jersey Number</label>
+                    <input type="number" id="jerseyNumber" min="0" max="99" required>
+                </div>
+                <div class="form-group">
+                    <label>Position</label>
+                    <select id="playerPosition" required>
+                        <option value="">Select Position</option>
+                        <option value="QB">Quarterback (QB)</option>
+                        <option value="RB">Running Back (RB)</option>
+                        <option value="WR">Wide Receiver (WR)</option>
+                        <option value="TE">Tight End (TE)</option>
+                        <option value="OL">Offensive Line (OL)</option>
+                        <option value="DL">Defensive Line (DL)</option>
+                        <option value="LB">Linebacker (LB)</option>
+                        <option value="DB">Defensive Back (DB)</option>
+                        <option value="K">Kicker (K)</option>
+                        <option value="P">Punter (P)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Email (Optional)</label>
+                    <input type="email" id="playerEmail">
+                </div>
+                <button type="submit" class="btn-primary">Add Player</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
