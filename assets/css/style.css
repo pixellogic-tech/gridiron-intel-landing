@@ -221,3 +221,258 @@ body {
         display: none;
     }
 }
+/* Add to your style.css */
+
+/* Login Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    margin: 50px auto;
+    padding: 0;
+    border: 1px solid #334155;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideDown 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close-modal {
+    color: #94a3b8;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: white;
+}
+
+.modal-header {
+    padding: 30px;
+    text-align: center;
+    border-bottom: 1px solid #334155;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: white;
+    font-size: 28px;
+}
+
+.modal-header p {
+    margin: 10px 0 0 0;
+    color: #94a3b8;
+}
+
+/* Auth Tabs */
+.auth-tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 0;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 15px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.auth-tab.active {
+    color: white;
+    background: #16a34a;
+}
+
+.auth-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Auth Forms */
+.auth-form {
+    display: none;
+    padding: 30px;
+}
+
+.auth-form.active {
+    display: block;
+    animation: fadeIn 0.3s;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #16a34a;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.form-group.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group.checkbox input {
+    width: auto;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-submit:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+}
+
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-loader {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.form-footer a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 14px;
+}
+
+.success-message {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid #22c55e;
+    border-radius: 8px;
+    color: #86efac;
+    font-size: 14px;
+}
+
+.player-notice {
+    padding: 20px;
+    background: rgba(59, 130, 246, 0.1);
+    border-top: 1px solid #334155;
+    text-align: center;
+    border-radius: 0 0 15px 15px;
+}
+
+.player-notice p {
+    margin: 0;
+    color: #93c5fd;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 20px auto;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
