@@ -1,11 +1,185 @@
 // ========================================
-// GRIDIRON INTEL - Complete Auth System
+// GRIDIRON INTEL - STANDALONE AUTH SYSTEM
+// No Backend Required - Works Offline
 // ========================================
 
-// API Configuration - CHANGE THIS TO YOUR ACTUAL API
-// For testing without backend, we'll use mock responses
-const USE_MOCK_API = true; // Set to false when you have real backend
-const API_URL = 'http://localhost:8000'; // Change to your real API URL
+// DEV MASTER ACCOUNT
+const DEV_ACCOUNTS = {
+    master: {
+        email: 'admin@gridironintel.com',
+        password: 'GridironDev2024!',
+        name: 'Dev Admin',
+        role: 'master_admin',
+        team_name: 'Gridiron Development',
+        school_name: 'Dev Testing School'
+    },
+    coach: {
+        email: 'coach@demo.com',
+        password: 'Coach123!',
+        name: 'Coach Demo',
+        role: 'head_coach',
+        team_name: 'Demo Eagles',
+        school_name: 'Demo High School'
+    }
+};
+
+// Simulated Database (localStorage)
+const DATABASE = {
+    users: [],
+    
+    init() {
+        // Load existing users from localStorage
+        const stored = localStorage.getItem('gridiron_users');
+        if (stored) {
+            this.users = JSON.parse(stored);
+        } else {
+            // Initialize with dev accounts
+            this.users = [
+                {
+                    id: 1,
+                    email: DEV_ACCOUNTS.master.email,
+                    password: this.hashPassword(DEV_ACCOUNTS.master.password),
+                    name: DEV_ACCOUNTS.master.name,
+                    role: DEV_ACCOUNTS.master.role,
+                    team_name: DEV_ACCOUNTS.master.team_name,
+                    school_name: DEV_ACCOUNTS.master.school_name,
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: 2,
+                    email: DEV_ACCOUNTS.coach.email,
+                    password: this.hashPassword(DEV_ACCOUNTS.coach.password),
+                    name: DEV_ACCOUNTS.coach.name,
+                    role: DEV_ACCOUNTS.coach.role,
+                    team_name: DEV_ACCOUNTS.coach.team_name,
+                    school_name: DEV_ACCOUNTS.coach.school_name,
+                    created_at: new Date().toISOString()
+                }
+            ];
+            this.save();
+        }
+    },
+    
+    save() {
+        localStorage.setItem('gridiron_users', JSON.stringify(this.users));
+    },
+    
+    hashPassword(password) {
+        // Simple hash for demo (in production, use bcrypt on backend)
+        return btoa(password);
+    },
+    
+    verifyPassword(password, hash) {
+        return this.hashPassword(password) === hash;
+    },
+    
+    findUserByEmail(email) {
+        return this.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    },
+    
+    createUser(userData) {
+        const newUser = {
+            id: this.users.length + 1,
+            ...userData,
+            password: this.hashPassword(userData.password),
+            created_at: new Date().toISOString()
+        };
+        this.users.push(newUser);
+        this.save();
+        return newUser;
+    }
+};
+
+// Initialize database
+DATABASE.init();
+
+// ========================================
+// SESSION MANAGEMENT
+// ========================================
+
+const SESSION = {
+    currentUser: null,
+    
+    init() {
+        const token = localStorage.getItem('gridiron_token');
+        const userStr = localStorage.getItem('gridiron_user');
+        
+        if (token && userStr) {
+            this.currentUser = JSON.parse(userStr);
+            this.updateUI();
+        }
+    },
+    
+    login(user) {
+        // Create session
+        const token = 'token_' + Date.now() + '_' + Math.random();
+        const userInfo = {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            team_name: user.team_name,
+            school_name: user.school_name
+        };
+        
+        localStorage.setItem('gridiron_token', token);
+        localStorage.setItem('gridiron_user', JSON.stringify(userInfo));
+        
+        this.currentUser = userInfo;
+        this.updateUI();
+        
+        return { token, userInfo };
+    },
+    
+    logout() {
+        localStorage.removeItem('gridiron_token');
+        localStorage.removeItem('gridiron_user');
+        this.currentUser = null;
+        window.location.reload();
+    },
+    
+    updateUI() {
+        if (this.currentUser) {
+            const navLinks = document.querySelector('.nav-links');
+            const loginBtn = navLinks.querySelector('.btn-nav');
+            
+            if (loginBtn) {
+                // Change login button to user info
+                loginBtn.innerHTML = `
+                    <i class="fas fa-user-circle"></i> 
+                    ${this.currentUser.name}
+                `;
+                loginBtn.onclick = () => this.showUserMenu();
+                
+                // Add logout button if not exists
+                if (!document.getElementById('logoutBtn')) {
+                    const logoutBtn = document.createElement('button');
+                    logoutBtn.id = 'logoutBtn';
+                    logoutBtn.className = 'btn-nav-secondary';
+                    logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+                    logoutBtn.onclick = () => {
+                        if (confirm('Are you sure you want to logout?')) {
+                            this.logout();
+                        }
+                    };
+                    navLinks.appendChild(logoutBtn);
+                }
+            }
+        }
+    },
+    
+    showUserMenu() {
+        alert(`
+            👤 Logged in as: ${this.currentUser.name}
+            📧 Email: ${this.currentUser.email}
+            🎓 School: ${this.currentUser.school_name}
+            🏈 Team: ${this.currentUser.team_name}
+            👔 Role: ${this.currentUser.role}
+            
+            In production, this would open your dashboard.
+        `);
+    }
+};
 
 // ========================================
 // MODAL FUNCTIONS
@@ -14,14 +188,15 @@ const API_URL = 'http://localhost:8000'; // Change to your real API URL
 function openLoginModal() {
     document.getElementById('loginModal').style.display = 'block';
     document.body.style.overflow = 'hidden';
-    // Reset to login tab
-    switchTab('login', document.querySelector('.auth-tab'));
+    
+    // Show dev account info
+    showDevAccountInfo();
 }
 
 function openSignupModal() {
     document.getElementById('loginModal').style.display = 'block';
     document.body.style.overflow = 'hidden';
-    // Switch to signup tab
+    
     const signupTab = document.querySelectorAll('.auth-tab')[1];
     switchTab('signup', signupTab);
 }
@@ -32,7 +207,6 @@ function closeLoginModal() {
     clearForms();
 }
 
-// Tab Switching
 function switchTab(tab, element) {
     // Update tab buttons
     document.querySelectorAll('.auth-tab').forEach(t => {
@@ -47,22 +221,66 @@ function switchTab(tab, element) {
     
     if (tab === 'login') {
         document.getElementById('loginForm').classList.add('active');
+        showDevAccountInfo();
     } else {
         document.getElementById('signupForm').classList.add('active');
+        hideDevAccountInfo();
     }
     
-    // Clear any error messages
-    document.querySelectorAll('.error-message, .success-message').forEach(msg => {
-        msg.style.display = 'none';
-    });
+    // Clear messages
+    clearMessages();
+}
+
+function showDevAccountInfo() {
+    // Remove existing dev info if any
+    hideDevAccountInfo();
+    
+    // Add dev account info box
+    const loginForm = document.getElementById('loginForm');
+    const devInfo = document.createElement('div');
+    devInfo.id = 'devAccountInfo';
+    devInfo.className = 'dev-info-box';
+    devInfo.innerHTML = `
+        <div style="background: rgba(22, 163, 74, 0.1); border: 1px solid #16a34a; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <h4 style="color: #16a34a; margin: 0 0 10px 0;">🔑 Dev Master Account</h4>
+            <p style="margin: 5px 0; color: #cbd5e1; font-size: 14px;">
+                <strong>Email:</strong> admin@gridironintel.com<br>
+                <strong>Password:</strong> GridironDev2024!
+            </p>
+            <button onclick="fillDevCredentials()" style="
+                background: #16a34a;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 10px;
+                font-size: 14px;
+            ">Auto-Fill Dev Credentials</button>
+        </div>
+    `;
+    loginForm.insertBefore(devInfo, loginForm.firstChild);
+}
+
+function hideDevAccountInfo() {
+    const devInfo = document.getElementById('devAccountInfo');
+    if (devInfo) {
+        devInfo.remove();
+    }
+}
+
+function fillDevCredentials() {
+    document.getElementById('loginEmail').value = DEV_ACCOUNTS.master.email;
+    document.getElementById('loginPassword').value = DEV_ACCOUNTS.master.password;
 }
 
 // ========================================
-// AUTHENTICATION FUNCTIONS
+// AUTHENTICATION HANDLERS
 // ========================================
 
 async function handleLogin(event) {
     event.preventDefault();
+    clearMessages();
     
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
@@ -70,234 +288,186 @@ async function handleLogin(event) {
     
     // Show loading
     const loginBtn = document.getElementById('loginBtn');
-    loginBtn.disabled = true;
-    loginBtn.querySelector('.btn-text').style.display = 'none';
-    loginBtn.querySelector('.btn-loader').style.display = 'inline';
+    const btnText = loginBtn.querySelector('.btn-text');
+    const btnLoader = loginBtn.querySelector('.btn-loader');
     
-    // Hide previous messages
-    document.getElementById('loginError').style.display = 'none';
-    document.getElementById('loginSuccess').style.display = 'none';
+    loginBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'inline';
+    
+    // Simulate network delay for realism
+    await new Promise(resolve => setTimeout(resolve, 800));
     
     try {
-        let data;
+        // Find user
+        const user = DATABASE.findUserByEmail(email);
         
-        if (USE_MOCK_API) {
-            // Mock successful login for testing
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-            
-            data = {
-                access_token: 'mock_token_' + Date.now(),
-                user_info: {
-                    name: 'Coach Demo',
-                    email: email,
-                    role: 'head_coach',
-                    team_name: 'Demo Eagles',
-                    school_name: 'Demo High School'
-                },
-                redirect_url: '#coach-dashboard'
-            };
-        } else {
-            // Real API call
-            const response = await fetch(`${API_URL}/api/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                    remember_me: rememberMe
-                })
-            });
-            
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.detail || 'Login failed');
-            }
-            
-            data = await response.json();
+        if (!user) {
+            throw new Error('No account found with this email');
         }
         
-        // Store tokens
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('user_info', JSON.stringify(data.user_info));
+        // Verify password
+        if (!DATABASE.verifyPassword(password, user.password)) {
+            throw new Error('Invalid password');
+        }
         
-        // Show success message
-        const successMsg = document.getElementById('loginSuccess');
-        successMsg.textContent = `Welcome back, ${data.user_info.name}! Redirecting...`;
-        successMsg.style.display = 'block';
+        // Login successful
+        const session = SESSION.login(user);
         
-        // Update UI
-        updateUIForLoggedInUser(data.user_info);
+        // Show success
+        showSuccess('loginSuccess', `Welcome back, ${user.name}! Redirecting...`);
         
         // Close modal after delay
         setTimeout(() => {
             closeLoginModal();
-            // In real app, redirect to: window.location.href = data.redirect_url;
-            alert('Login successful! In production, you would be redirected to the coach dashboard.');
+            
+            // Show dashboard preview
+            if (user.role === 'master_admin') {
+                alert(`
+                    🎉 MASTER ADMIN LOGIN SUCCESSFUL!
+                    
+                    You now have access to:
+                    ✅ All coach accounts
+                    ✅ System administration
+                    ✅ Database management
+                    ✅ Full API access
+                    
+                    This is a demo. In production, you'd be redirected to the admin dashboard.
+                `);
+            } else {
+                alert(`
+                    ✅ Login Successful!
+                    
+                    Welcome back, ${user.name}!
+                    Team: ${user.team_name}
+                    
+                    In production, you'd be redirected to your coach dashboard.
+                `);
+            }
         }, 2000);
         
     } catch (error) {
-        console.error('Login error:', error);
-        const errorMsg = document.getElementById('loginError');
-        
-        if (USE_MOCK_API) {
-            errorMsg.textContent = 'Mock API is enabled. In production, this would connect to your real backend.';
-        } else {
-            errorMsg.textContent = error.message || 'Connection error. Please check your internet and try again.';
-        }
-        errorMsg.style.display = 'block';
+        showError('loginError', error.message);
     } finally {
         // Reset button
         loginBtn.disabled = false;
-        loginBtn.querySelector('.btn-text').style.display = 'inline';
-        loginBtn.querySelector('.btn-loader').style.display = 'none';
+        btnText.style.display = 'inline';
+        btnLoader.style.display = 'none';
     }
 }
 
 async function handleSignup(event) {
     event.preventDefault();
+    clearMessages();
     
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const email = document.getElementById('signupEmail').value;
-    const schoolName = document.getElementById('schoolName').value;
-    const teamName = document.getElementById('teamName').value;
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const schoolName = document.getElementById('schoolName').value.trim();
+    const teamName = document.getElementById('teamName').value.trim();
     const password = document.getElementById('signupPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     
-    // Hide previous messages
-    document.getElementById('signupError').style.display = 'none';
-    document.getElementById('signupSuccess').style.display = 'none';
-    
-    // Validate passwords match
+    // Validation
     if (password !== confirmPassword) {
-        const errorMsg = document.getElementById('signupError');
-        errorMsg.textContent = 'Passwords do not match!';
-        errorMsg.style.display = 'block';
+        showError('signupError', 'Passwords do not match!');
         return;
     }
     
-    // Validate password length
     if (password.length < 8) {
-        const errorMsg = document.getElementById('signupError');
-        errorMsg.textContent = 'Password must be at least 8 characters!';
-        errorMsg.style.display = 'block';
+        showError('signupError', 'Password must be at least 8 characters!');
+        return;
+    }
+    
+    // Check if email exists
+    if (DATABASE.findUserByEmail(email)) {
+        showError('signupError', 'An account with this email already exists!');
         return;
     }
     
     // Show loading
     const signupBtn = document.getElementById('signupBtn');
+    const btnText = signupBtn.querySelector('.btn-text');
+    const btnLoader = signupBtn.querySelector('.btn-loader');
+    
     signupBtn.disabled = true;
-    signupBtn.querySelector('.btn-text').style.display = 'none';
-    signupBtn.querySelector('.btn-loader').style.display = 'inline';
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'inline';
+    
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     try {
-        let data;
+        // Create account
+        const newUser = DATABASE.createUser({
+            email: email,
+            password: password,
+            name: `${firstName} ${lastName}`,
+            role: 'head_coach',
+            team_name: teamName,
+            school_name: schoolName
+        });
         
-        if (USE_MOCK_API) {
-            // Mock successful signup for testing
-            await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
-            
-            data = {
-                message: 'Account created successfully',
-                access_token: 'mock_token_' + Date.now(),
-                user_id: Math.floor(Math.random() * 1000),
-                team_id: Math.floor(Math.random() * 100),
-                redirect_url: '#coach-onboarding'
-            };
-        } else {
-            // Real API call
-            const response = await fetch(`${API_URL}/api/auth/signup/coach`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    first_name: firstName,
-                    last_name: lastName,
-                    email: email,
-                    school_name: schoolName,
-                    team_name: teamName,
-                    password: password
-                })
-            });
-            
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.detail || 'Signup failed');
-            }
-            
-            data = await response.json();
-        }
-        
-        // Store token
-        localStorage.setItem('access_token', data.access_token);
+        // Auto-login
+        SESSION.login(newUser);
         
         // Show success
-        const successMsg = document.getElementById('signupSuccess');
-        successMsg.innerHTML = `
-            <strong>✅ Account created successfully!</strong><br>
-            Welcome to Gridiron Intel, Coach ${lastName}!<br>
-            <small>Redirecting to setup...</small>
-        `;
-        successMsg.style.display = 'block';
+        showSuccess('signupSuccess', `
+            Account created successfully!<br>
+            Welcome to Gridiron Intel, Coach ${lastName}!
+        `);
         
         // Clear form
         clearForms();
         
-        // Redirect after delay
+        // Close modal after delay
         setTimeout(() => {
             closeLoginModal();
-            // In real app: window.location.href = data.redirect_url;
             alert(`
-                Signup successful! 
+                🎉 Account Created Successfully!
                 
-                Your account details:
-                - Name: ${firstName} ${lastName}
-                - Email: ${email}
-                - School: ${schoolName}
-                - Team: ${teamName}
+                Coach: ${firstName} ${lastName}
+                Email: ${email}
+                School: ${schoolName}
+                Team: ${teamName}
                 
-                In production, you would be redirected to complete your team setup.
+                You are now logged in. In production, you'd be redirected to setup your team.
             `);
-        }, 3000);
+        }, 2500);
         
     } catch (error) {
-        console.error('Signup error:', error);
-        const errorMsg = document.getElementById('signupError');
-        
-        if (USE_MOCK_API) {
-            errorMsg.textContent = 'Mock API is enabled. Your account would be created with a real backend.';
-        } else {
-            errorMsg.textContent = error.message || 'Connection error. Please check your internet and try again.';
-        }
-        errorMsg.style.display = 'block';
+        showError('signupError', 'Failed to create account. Please try again.');
     } finally {
-        // Reset button
         signupBtn.disabled = false;
-        signupBtn.querySelector('.btn-text').style.display = 'inline';
-        signupBtn.querySelector('.btn-loader').style.display = 'none';
+        btnText.style.display = 'inline';
+        btnLoader.style.display = 'none';
     }
 }
 
 // ========================================
-// UI UPDATE FUNCTIONS
+// UTILITY FUNCTIONS
 // ========================================
 
-function updateUIForLoggedInUser(userData) {
-    const navLinks = document.querySelector('.nav-links');
-    const loginBtn = navLinks.querySelector('.btn-nav');
-    
-    if (loginBtn && userData) {
-        loginBtn.innerHTML = `
-            <i class="fas fa-user"></i> 
-            ${userData.name || userData.email.split('@')[0]}
-        `;
-        loginBtn.onclick = () => {
-            alert('You are logged in! Dashboard access would be here.');
-        };
+function showError(elementId, message) {
+    const errorEl = document.getElementById(elementId);
+    if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
     }
+}
+
+function showSuccess(elementId, message) {
+    const successEl = document.getElementById(elementId);
+    if (successEl) {
+        successEl.innerHTML = message;
+        successEl.style.display = 'block';
+    }
+}
+
+function clearMessages() {
+    document.querySelectorAll('.error-message, .success-message').forEach(msg => {
+        msg.style.display = 'none';
+    });
 }
 
 function clearForms() {
@@ -308,48 +478,35 @@ function clearForms() {
             input.checked = false;
         }
     });
-    
-    document.querySelectorAll('.error-message, .success-message').forEach(msg => {
-        msg.style.display = 'none';
-    });
+    clearMessages();
 }
-
-// ========================================
-// OTHER FUNCTIONS
-// ========================================
 
 function showForgotPassword() {
     const email = prompt('Enter your email address for password reset:');
     
     if (email) {
-        if (USE_MOCK_API) {
-            alert('Password reset link sent! (This is a demo - no actual email was sent)');
+        const user = DATABASE.findUserByEmail(email);
+        if (user) {
+            alert(`
+                Password Reset Email Sent!
+                
+                A reset link has been sent to: ${email}
+                
+                (This is a demo. In production, an actual email would be sent)
+                
+                For testing, your current password is stored locally.
+            `);
         } else {
-            fetch(`${API_URL}/api/auth/forgot-password`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('If an account exists with this email, you will receive password reset instructions.');
-            })
-            .catch(error => {
-                alert('Error sending reset email. Please try again.');
-            });
+            alert('If an account exists with this email, you will receive reset instructions.');
         }
     }
 }
 
 function toggleMobileMenu() {
-    const navToggle = document.getElementById('navToggle');
-    navToggle.classList.toggle('active');
-    // Add mobile menu functionality here if needed
+    console.log('Mobile menu toggled');
 }
 
-// Close modal when clicking outside
+// Close modal on outside click
 window.onclick = function(event) {
     const modal = document.getElementById('loginModal');
     if (event.target === modal) {
@@ -362,42 +519,88 @@ window.onclick = function(event) {
 // ========================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Gridiron Intel Landing Page Loaded');
-    console.log('Mock API Mode:', USE_MOCK_API);
+    console.log(`
+%c🏈 GRIDIRON INTEL - AUTH SYSTEM READY 🏈
+
+%c✅ STANDALONE MODE - No Backend Required
+✅ Dev Master Account Available
+✅ All data stored locally
+
+📧 Master Account:
+   Email: admin@gridironintel.com
+   Password: GridironDev2024!
+
+📧 Demo Coach Account:
+   Email: coach@demo.com
+   Password: Coach123!
+
+💡 You can also create new accounts with the signup form!
+
+`, 
+    'color: #16a34a; font-size: 20px; font-weight: bold; background: #0f172a; padding: 10px;',
+    'color: #94a3b8; font-size: 14px;'
+    );
     
-    if (USE_MOCK_API) {
-        console.log('📌 Running in DEMO mode - no backend required');
-        console.log('📌 To connect to real backend, set USE_MOCK_API = false in app.js');
-    }
+    // Initialize session
+    SESSION.init();
     
-    // Check if user is logged in
-    const token = localStorage.getItem('access_token');
-    if (token) {
-        const userInfo = localStorage.getItem('user_info');
-        if (userInfo) {
-            updateUIForLoggedInUser(JSON.parse(userInfo));
-        }
-    }
+    // Show current users in console (dev mode)
+    console.log('Current registered users:', DATABASE.users.map(u => ({
+        email: u.email,
+        name: u.name,
+        role: u.role
+    })));
 });
 
 // ========================================
-// DEMO MESSAGE
+// ADMIN FUNCTIONS (for dev account)
 // ========================================
 
+// Add these to window for console access
+window.GRIDIRON_ADMIN = {
+    // View all users
+    listUsers() {
+        console.table(DATABASE.users.map(u => ({
+            id: u.id,
+            email: u.email,
+            name: u.name,
+            role: u.role,
+            team: u.team_name
+        })));
+    },
+    
+    // Clear all data
+    resetDatabase() {
+        if (confirm('This will delete all users except dev accounts. Continue?')) {
+            localStorage.removeItem('gridiron_users');
+            DATABASE.init();
+            console.log('Database reset complete');
+            window.location.reload();
+        }
+    },
+    
+    // Add test users
+    addTestUsers(count = 5) {
+        for (let i = 1; i <= count; i++) {
+            DATABASE.createUser({
+                email: `coach${i}@test.com`,
+                password: 'Test123!',
+                name: `Test Coach ${i}`,
+                role: 'head_coach',
+                team_name: `Test Team ${i}`,
+                school_name: `Test School ${i}`
+            });
+        }
+        console.log(`Added ${count} test users`);
+        this.listUsers();
+    }
+};
+
 console.log(`
-%c🏈 GRIDIRON INTEL 🏈
-%cAuthentication System Ready!
+%c💡 Admin Tools Available in Console:
 
-Current Mode: ${USE_MOCK_API ? 'DEMO (No backend needed)' : 'PRODUCTION (Requires backend)'}
+GRIDIRON_ADMIN.listUsers()     - View all users
+GRIDIRON_ADMIN.addTestUsers(5) - Add test users  
+GRIDIRON_ADMIN.resetDatabase() - Reset to default
 
-To test:
-1. Click "Coach Login" or "Sign Up as Coach"
-2. Enter any email/password (in demo mode)
-3. See the mock responses
-
-To connect to real backend:
-1. Set USE_MOCK_API = false in app.js
-2. Update API_URL to your backend address
-3. Make sure your backend is running
-
-`, 'color: #16a34a; font-size: 20px; font-weight: bold;', 'color: #94a3b8; font-size: 14px;');
+`, 'color: #60a5fa; font-weight: bold;');
