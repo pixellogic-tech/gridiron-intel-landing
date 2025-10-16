@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Gridiron Intel</title>
+    <title>Coach Dashboard - Gridiron Intel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -108,6 +108,34 @@
             color: #94a3b8;
         }
         .empty-state i { font-size: 4rem; margin-bottom: 20px; }
+        
+        /* Film Analysis Styles */
+        .analysis-step {
+            padding: 10px;
+            color: #94a3b8;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+        .analysis-step i { margin-right: 10px; }
+        #uploadArea:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #4ade80;
+        }
+        .film-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .film-info h4 { margin: 0 0 5px 0; }
+        .film-info p {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -152,111 +180,97 @@
             </div>
         </div>
 
-        <!-- Quick Actions -->
+        <!-- Film Analysis Section -->
         <div class="content-card">
-            <h2 style="margin-bottom: 20px;">Quick Actions</h2>
-            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <button class="btn" onclick="addPlayer()">
-                    <i class="fas fa-user-plus"></i> Add Player
-                </button>
-                <button class="btn" onclick="uploadFilm()">
-                    <i class="fas fa-upload"></i> Upload Film
-                </button>
-                <button class="btn" onclick="runPrediction()">
-                    <i class="fas fa-brain"></i> Run Prediction
-                </button>
-            </div>
-        </div>
-<!-- Film Analysis Section -->
-<div class="content-card">
-    <h2 style="margin-bottom: 20px;">Game Film Analysis</h2>
-    
-    <!-- Upload Area -->
-    <div id="uploadArea" style="
-        border: 2px dashed rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
-        padding: 40px;
-        text-align: center;
-        margin-bottom: 20px;
-        cursor: pointer;
-    " onclick="document.getElementById('filmInput').click()">
-        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #4ade80; margin-bottom: 15px;"></i>
-        <p>Drag & drop game film here or click to browse</p>
-        <p style="color: #94a3b8; font-size: 0.875rem; margin-top: 5px;">Supports MP4, MOV, AVI up to 5GB</p>
-        <input type="file" id="filmInput" accept="video/*" style="display: none;" onchange="handleFilmUpload(event)">
-    </div>
-
-    <!-- Films List -->
-    <div id="filmsList">
-        <!-- Films will be listed here -->
-    </div>
-</div>
-
-<!-- Film Analysis Modal -->
-<div id="analysisModal" style="
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-">
-    <div style="
-        background: linear-gradient(135deg, #1e293b, #0f172a);
-        max-width: 800px;
-        margin: 40px auto;
-        border-radius: 15px;
-        padding: 30px;
-    ">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2>Film Analysis</h2>
-            <button onclick="closeAnalysisModal()" style="
-                background: none;
-                border: none;
-                color: #94a3b8;
-                font-size: 1.5rem;
-                cursor: pointer;
-            ">&times;</button>
-        </div>
-        
-        <div id="analysisProgress">
-            <div style="margin-bottom: 20px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>Analyzing Film...</span>
-                    <span id="progressPercent">0%</span>
-                </div>
-                <div style="
-                    background: rgba(255, 255, 255, 0.1);
-                    border-radius: 10px;
-                    height: 10px;
-                    overflow: hidden;
-                ">
-                    <div id="progressBar" style="
-                        width: 0%;
-                        height: 100%;
-                        background: linear-gradient(90deg, #16a34a, #4ade80);
-                        transition: width 0.3s;
-                    "></div>
-                </div>
-            </div>
+            <h2 style="margin-bottom: 20px;">Game Film Analysis</h2>
             
-            <div id="analysisSteps" style="color: #94a3b8;">
-                <!-- Steps will be added here -->
+            <!-- Upload Area -->
+            <div id="uploadArea" style="
+                border: 2px dashed rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                padding: 40px;
+                text-align: center;
+                margin-bottom: 20px;
+                cursor: pointer;
+            " onclick="document.getElementById('filmInput').click()">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #4ade80; margin-bottom: 15px;"></i>
+                <p>Drag & drop game film here or click to browse</p>
+                <p style="color: #94a3b8; font-size: 0.875rem; margin-top: 5px;">Supports MP4, MOV, AVI up to 5GB</p>
+                <input type="file" id="filmInput" accept="video/*" style="display: none;" onchange="handleFilmUpload(event)">
+            </div>
+
+            <!-- Films List -->
+            <div id="filmsList">
+                <!-- Films will be listed here -->
             </div>
         </div>
-        
-        <div id="analysisResults" style="display: none;">
-            <!-- Results will be shown here -->
-        </div>
-    </div>
-</div>
+
         <!-- Players List -->
         <div class="content-card">
             <h2 style="margin-bottom: 20px;">Team Roster</h2>
             <div id="playersList" class="players-grid">
                 <!-- Players will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Film Analysis Modal -->
+    <div id="analysisModal" style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+    ">
+        <div style="
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            max-width: 800px;
+            margin: 40px auto;
+            border-radius: 15px;
+            padding: 30px;
+        ">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Film Analysis</h2>
+                <button onclick="closeAnalysisModal()" style="
+                    background: none;
+                    border: none;
+                    color: #94a3b8;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                ">&times;</button>
+            </div>
+            
+            <div id="analysisProgress">
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Analyzing Film...</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div style="
+                        background: rgba(255, 255, 255, 0.1);
+                        border-radius: 10px;
+                        height: 10px;
+                        overflow: hidden;
+                    ">
+                        <div id="progressBar" style="
+                            width: 0%;
+                            height: 100%;
+                            background: linear-gradient(90deg, #16a34a, #4ade80);
+                            transition: width 0.3s;
+                        "></div>
+                    </div>
+                </div>
+                
+                <div id="analysisSteps" style="color: #94a3b8;">
+                    <!-- Steps will be added here -->
+                </div>
+            </div>
+            
+            <div id="analysisResults" style="display: none;">
+                <!-- Results will be shown here -->
             </div>
         </div>
     </div>
@@ -308,6 +322,36 @@
                     </div>
                 `).join('');
             }
+
+            // Display films
+            const filmsList = document.getElementById('filmsList');
+            if (filmsList) {
+                const films = data.films || [];
+                
+                if (films.length === 0) {
+                    filmsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-film"></i>
+                            <p>No films uploaded yet</p>
+                            <button class="btn" onclick="document.getElementById('filmInput').click()" style="margin-top: 20px;">
+                                Upload Your First Film
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    filmsList.innerHTML = films.map(film => `
+                        <div class="film-item">
+                            <div class="film-info">
+                                <h4>vs ${film.opponent}</h4>
+                                <p>Uploaded ${new Date(film.uploadDate).toLocaleDateString()}</p>
+                            </div>
+                            <button class="btn" onclick="viewAnalysis(${film.id})">
+                                <i class="fas fa-chart-bar"></i> View Analysis
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
         }
 
         // ========== ADD PLAYER ==========
@@ -330,105 +374,4 @@
             
             const newPlayer = {
                 id: Date.now(),
-                name: name,
-                jerseyNumber: number,
-                position: position.toUpperCase(),
-                inviteCode: generateCode(),
-                addedDate: new Date().toISOString()
-            };
-            
-            data.players.push(newPlayer);
-            localStorage.setItem('gridiron_dashboard', JSON.stringify(data));
-            
-            showNotification(`✅ ${name} added successfully! Invite code: ${newPlayer.inviteCode}`);
-            loadDashboard();
-        }
-
-        // ========== UPLOAD FILM ==========
-        function uploadFilm() {
-            const opponent = prompt('Enter opponent team name:');
-            if (!opponent) return;
-            
-            const data = JSON.parse(localStorage.getItem('gridiron_dashboard') || '{"players":[],"films":[]}');
-            
-            if (!data.films) data.films = [];
-            
-            data.films.push({
-                id: Date.now(),
-                opponent: opponent,
-                uploadDate: new Date().toISOString(),
-                status: 'processing'
-            });
-            
-            localStorage.setItem('gridiron_dashboard', JSON.stringify(data));
-            
-            showNotification(`✅ Film for ${opponent} uploaded successfully!`);
-            loadDashboard();
-        }
-
-        // ========== RUN PREDICTION ==========
-        function runPrediction() {
-            const down = prompt('Enter down (1-4):') || '1';
-            const distance = prompt('Enter distance (yards):') || '10';
-            
-            const plays = ['Run Left', 'Run Right', 'Pass Short', 'Pass Deep', 'Screen Pass', 'Play Action'];
-            const formations = ['I-Formation', 'Shotgun', 'Pistol', 'Spread'];
-            
-            const prediction = plays[Math.floor(Math.random() * plays.length)];
-            const formation = formations[Math.floor(Math.random() * formations.length)];
-            const confidence = Math.floor(Math.random() * 30) + 70;
-            
-            alert(`🎯 AI PREDICTION\n\nSituation: ${down} & ${distance}\nFormation: ${formation}\nPlay: ${prediction}\nConfidence: ${confidence}%`);
-        }
-
-        // ========== LOGOUT ==========
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('gridiron_token');
-                localStorage.removeItem('gridiron_user');
-                window.location.href = 'index.html';
-            }
-        }
-
-        // ========== UTILITIES ==========
-        function generateCode() {
-            return Math.random().toString(36).substr(2, 8).toUpperCase();
-        }
-
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, #16a34a, #10b981);
-                color: white;
-                padding: 15px 25px;
-                border-radius: 10px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-                z-index: 10000;
-                animation: slideIn 0.3s;
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        // Add animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-        `;
-        document.head.appendChild(style);
-
-        console.log('✅ Dashboard fully loaded and ready!');
-    </script>
-</body>
-</html>
+                name
