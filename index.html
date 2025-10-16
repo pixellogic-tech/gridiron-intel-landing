@@ -9,149 +9,129 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <!-- Add this to your index.html (right after <body> tag) -->
-
-<!-- Login Modal -->
-<div id="loginModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-        
-        <div class="modal-header">
-            <h2>🏈 Gridiron Intel Login</h2>
-            <p>Access your coach or player account</p>
-        </div>
-        
-        <!-- Login/Signup Tabs -->
-        <div class="auth-tabs">
-            <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
-            <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
-        </div>
-        
-        <!-- Login Form -->
-        <div id="loginForm" class="auth-form active">
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input 
-                        type="email" 
-                        id="loginEmail" 
-                        required 
-                        placeholder="coach@school.edu"
-                    />
-                </div>
-                
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input 
-                        type="password" 
-                        id="loginPassword" 
-                        required 
-                        placeholder="Enter your password"
-                    />
-                </div>
-                
-                <div class="form-group checkbox">
-                    <input type="checkbox" id="rememberMe" />
-                    <label for="rememberMe">Remember me for 7 days</label>
-                </div>
-                
-                <button type="submit" class="btn-submit" id="loginBtn">
-                    <span class="btn-text">Sign In</span>
-                    <span class="btn-loader" style="display: none;">⟳</span>
-                </button>
-                
-                <div class="form-footer">
-                    <a href="#" onclick="showForgotPassword()">Forgot Password?</a>
-                </div>
-            </form>
+    <!-- Login Modal (Hidden by default) -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
             
-            <div id="loginError" class="error-message" style="display: none;"></div>
-            <div id="loginSuccess" class="success-message" style="display: none;"></div>
-        </div>
-        
-        <!-- Signup Form -->
-        <div id="signupForm" class="auth-form">
-            <form onsubmit="handleSignup(event)">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="text" id="firstName" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" required />
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="signupEmail">Email</label>
-                    <input type="email" id="signupEmail" required />
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="schoolName">School Name</label>
-                        <input type="text" id="schoolName" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="teamName">Team Name</label>
-                        <input type="text" id="teamName" required />
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="signupPassword">Password</label>
-                    <input 
-                        type="password" 
-                        id="signupPassword" 
-                        required 
-                        minlength="8"
-                        placeholder="Minimum 8 characters"
-                    />
-                </div>
-                
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" required />
-                </div>
-                
-                <button type="submit" class="btn-submit" id="signupBtn">
-                    <span class="btn-text">Create Coach Account</span>
-                    <span class="btn-loader" style="display: none;">⟳</span>
-                </button>
-            </form>
+            <div class="modal-header">
+                <h2>🏈 Gridiron Intel</h2>
+                <p>Access your coach or player account</p>
+            </div>
             
-            <div id="signupError" class="error-message" style="display: none;"></div>
-            <div id="signupSuccess" class="success-message" style="display: none;"></div>
-        </div>
-        
-        <!-- Player Login Notice -->
-        <div class="player-notice">
-            <p>🏃 Players: Get your invitation code from your coach first</p>
+            <!-- Login/Signup Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login', this)">Sign In</button>
+                <button class="auth-tab" onclick="switchTab('signup', this)">Sign Up</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input 
+                            type="email" 
+                            id="loginEmail" 
+                            required 
+                            placeholder="coach@school.edu"
+                        />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input 
+                            type="password" 
+                            id="loginPassword" 
+                            required 
+                            placeholder="Enter your password"
+                        />
+                    </div>
+                    
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="rememberMe" />
+                        <label for="rememberMe">Remember me for 7 days</label>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit" id="loginBtn">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-loader" style="display: none;">Loading...</span>
+                    </button>
+                    
+                    <div class="form-footer">
+                        <a href="#" onclick="showForgotPassword()">Forgot Password?</a>
+                    </div>
+                </form>
+                
+                <div id="loginError" class="error-message" style="display: none;"></div>
+                <div id="loginSuccess" class="success-message" style="display: none;"></div>
+            </div>
+            
+            <!-- Signup Form -->
+            <div id="signupForm" class="auth-form">
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" required />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" required />
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="schoolName">School Name</label>
+                            <input type="text" id="schoolName" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="teamName">Team Name</label>
+                            <input type="text" id="teamName" required />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input 
+                            type="password" 
+                            id="signupPassword" 
+                            required 
+                            minlength="8"
+                            placeholder="Minimum 8 characters"
+                        />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" required />
+                    </div>
+                    
+                    <button type="submit" class="btn-submit" id="signupBtn">
+                        <span class="btn-text">Create Coach Account</span>
+                        <span class="btn-loader" style="display: none;">Creating...</span>
+                    </button>
+                </form>
+                
+                <div id="signupError" class="error-message" style="display: none;"></div>
+                <div id="signupSuccess" class="success-message" style="display: none;"></div>
+            </div>
+            
+            <!-- Player Login Notice -->
+            <div class="player-notice">
+                <p>🏃 Players: Get your invitation code from your coach first</p>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Update your navigation to include login button -->
-<nav class="navbar">
-    <div class="container">
-        <div class="nav-brand">
-            <span class="logo">🏈</span>
-            <span>Gridiron Intel</span>
-        </div>
-        <div class="nav-links">
-            <a href="#features">Features</a>
-            <a href="#for-coaches">For Coaches</a>
-            <a href="#download">Download</a>
-            <button onclick="openLoginModal()" class="btn-nav">
-                <i class="fas fa-sign-in-alt"></i> Coach Login
-            </button>
-        </div>
-    </div>
-</nav>
-    
-    <!-- Navigation -->
-    <nav class="navbar">
+    <!-- Main Navigation (ONLY ONE) -->
+    <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-brand">
                 <span class="logo">🏈</span>
@@ -161,7 +141,14 @@
                 <a href="#features">Features</a>
                 <a href="#for-coaches">For Coaches</a>
                 <a href="#download">Download</a>
-                <a href="https://app.gridironintel.com/login" class="btn-nav">Coach Login</a>
+                <button onclick="openLoginModal()" class="btn-nav">
+                    <i class="fas fa-sign-in-alt"></i> Coach Login
+                </button>
+            </div>
+            <div class="nav-toggle" id="navToggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
     </nav>
@@ -181,9 +168,9 @@
             </p>
             
             <div class="hero-buttons">
-                <a href="https://app.gridironintel.com/register/coach" class="btn-primary">
+                <button onclick="openSignupModal()" class="btn-primary">
                     <i class="fas fa-user-plus"></i> Sign Up as Coach - FREE
-                </a>
+                </button>
                 <a href="#demo" class="btn-secondary">
                     <i class="fas fa-play"></i> Watch Demo
                 </a>
@@ -228,22 +215,22 @@
                 <div class="platform-card">
                     <i class="fab fa-apple"></i>
                     <h3>iOS</h3>
-                    <a href="#" class="btn-download">App Store</a>
+                    <a href="#" class="btn-download">Coming Soon</a>
                 </div>
                 <div class="platform-card">
                     <i class="fab fa-android"></i>
                     <h3>Android</h3>
-                    <a href="#" class="btn-download">Google Play</a>
+                    <a href="#" class="btn-download">Coming Soon</a>
                 </div>
                 <div class="platform-card">
                     <i class="fab fa-windows"></i>
                     <h3>Windows</h3>
-                    <a href="#" class="btn-download">Download</a>
+                    <a href="#" class="btn-download">Coming Soon</a>
                 </div>
                 <div class="platform-card">
                     <i class="fab fa-linux"></i>
                     <h3>Linux</h3>
-                    <a href="#" class="btn-download">AppImage</a>
+                    <a href="#" class="btn-download">Coming Soon</a>
                 </div>
             </div>
         </div>
