@@ -421,9 +421,13 @@ async function handleSignup(event) {
         clearForms();
         
         // Close modal after delay
-        setTimeout(() => {
-            closeLoginModal();
-            alert(`
+// In your handleLogin function, change the redirect:
+setTimeout(() => {
+    closeLoginModal();
+    // Redirect to dashboard
+    window.location.href = 'dashboard.html';
+}, 2000);
+        
                 🎉 Account Created Successfully!
                 
                 Coach: ${firstName} ${lastName}
