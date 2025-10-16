@@ -277,7 +277,6 @@ function fillDevCredentials() {
 // ========================================
 // AUTHENTICATION HANDLERS
 // ========================================
-
 async function handleLogin(event) {
     event.preventDefault();
     clearMessages();
@@ -295,7 +294,7 @@ async function handleLogin(event) {
     btnText.style.display = 'none';
     btnLoader.style.display = 'inline';
     
-    // Simulate network delay for realism
+    // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 800));
     
     try {
@@ -315,11 +314,24 @@ async function handleLogin(event) {
         const session = SESSION.login(user);
         
         // Show success
-        showSuccess('loginSuccess', `Welcome back, ${user.name}! Redirecting...`);
+        showSuccess('loginSuccess', `Welcome back, ${user.name}! Redirecting to dashboard...`);
         
-        // Close modal after delay
+        // IMPORTANT: Redirect to dashboard
         setTimeout(() => {
-            closeLoginModal();
+            // THIS IS THE KEY LINE - REDIRECT TO DASHBOARD
+            window.location.href = 'dashboard.html';
+        }, 1500);
+        
+    } catch (error) {
+        showError('loginError', error.message);
+    } finally {
+        // Reset button
+        loginBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnLoader.style.display = 'none';
+    }
+}
+
             
             // Show dashboard preview
             if (user.role === 'master_admin') {
