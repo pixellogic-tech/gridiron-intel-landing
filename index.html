@@ -1,94 +1,496 @@
-<!doctype html>
-<html lang="en">
+cd ~/gridiron-intel/landing
+
+cat > index.html << 'EOFINDEX'
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>gridiron — game film, analytics, & recruiting (beta)</title>
-  <meta name="description" content="gridiron — game film, analytics and recruiting tools built for coaches. Fast, private, and made by people who actually coach." />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gridiron Intel - AI Football Analytics for 2026 Season</title>
+    <meta name="description" content="AI-powered football analytics. 24/7 support. Player logins. Sideline predictions. Built for the 2026 season. First 5 teams get 35% off or $500 upfront.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gridiron': {
+                            'primary': '#0d7c0d',
+                            'dark': '#0a620a',
+                            'accent': '#00c853',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .float { animation: float 3s ease-in-out infinite; }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(13, 124, 13, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(13, 124, 13, 0.8); }
+        }
+        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+        
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #0d7c0d;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #0d7c0d;
+        }
+    </style>
 </head>
-<body>
-  <main class="site">
-    <nav class="nav">
-      <div class="brand">
-        <div class="logo">G</div>
-        <div class="title">gridiron</div>
-      </div>
-      <div class="nav-actions">
-        <a class="btn ghost" href="https://github.com/pixellogic-tech/gridiron-intel-landing" target="_blank" rel="noopener">View repo</a>
-        <a class="btn" id="cta-top" href="#get-started">Get started</a>
-      </div>
+<body class="bg-black text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-lg z-50 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-gridiron-primary">🏈 Gridiron Intel</span>
+                    <span class="ml-3 bg-gridiron-accent text-black text-xs px-2 py-1 rounded">2026 READY</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="hover:text-gridiron-accent transition">Features</a>
+                    <a href="#pricing" class="hover:text-gridiron-accent transition">Pricing</a>
+                    <a href="dashboard.html" class="bg-gridiron-primary hover:bg-gridiron-dark px-6 py-2 rounded-lg font-semibold transition">
+                        Coach Dashboard →
+                    </a>
+                </div>
+            </div>
+        </div>
     </nav>
 
-    <header class="hero">
-      <div class="hero-inner">
-        <h1>Video that coaches actually use.</h1>
-        <p class="lede">Fast uploads. Frame-accurate breakdowns. Recruiting-ready highlights. Built by coaches, for coaches — without the nonsense.</p>
-        <div class="hero-ctas">
-          <a class="btn large" id="cta-hero" href="#get-started">Join the beta</a>
-          <a class="ghost-link" href="#features">Why gridiron?</a>
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        <!-- Background -->
+        <div class="absolute inset-0">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gridiron-primary rounded-full filter blur-3xl opacity-20 float"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl opacity-20 float" style="animation-delay: 1s;"></div>
         </div>
-        <ul class="trust">
-          <li><strong>Secure</strong> — team-only access</li>
-          <li><strong>Fast</strong> — uploads + highlights in minutes</li>
-          <li><strong>Coach-first</strong> — no forced ads, no weird analytics</li>
-        </ul>
-      </div>
 
-      <div class="visual">
-        <div class="phone-mock">
-          <div class="video-frame">00:12 / 12:34</div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left: Text -->
+                <div>
+                    <div class="inline-block bg-gridiron-primary/20 border border-gridiron-primary px-4 py-2 rounded-full mb-6">
+                        <span class="text-gridiron-accent font-semibold">🤖 AI-Powered • 24/7 Support • 2026 Ready</span>
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-green-400 via-gridiron-primary to-blue-500 bg-clip-text text-transparent">
+                        Your AI Coach That Never Sleeps
+                    </h1>
+                    
+                    <p class="text-xl md:text-2xl text-gray-300 mb-8">
+                        Sideline play predictions. Player-specific training. Auto highlights for recruiting. 
+                        Name your AI assistant. Set your team colors. Dominate 2026.
+                    </p>
+
+                    <!-- Pricing Toggle -->
+                    <div class="bg-gray-900 p-6 rounded-xl mb-8 border border-gray-800">
+                        <div class="text-center mb-4">
+                            <div class="text-sm text-gray-400 mb-2">EARLY-BIRD DEAL (First 5 Teams)</div>
+                            <div class="text-3xl font-bold text-gridiron-accent mb-4">Choose Your Bonus</div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="pricing" value="discount" class="peer sr-only" checked>
+                                <div class="peer-checked:border-gridiron-primary peer-checked:bg-gridiron-primary/10 border-2 border-gray-700 rounded-lg p-4 text-center transition">
+                                    <div class="text-2xl font-bold text-white">35% OFF</div>
+                                    <div class="text-sm text-gray-400 mt-1">First Season</div>
+                                    <div class="text-gridiron-accent font-semibold mt-2">$845</div>
+                                    <div class="text-xs text-gray-500">Save $455</div>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer">
+                                <input type="radio" name="pricing" value="upfront" class="peer sr-only">
+                                <div class="peer-checked:border-gridiron-primary peer-checked:bg-gridiron-primary/10 border-2 border-gray-700 rounded-lg p-4 text-center transition">
+                                    <div class="text-2xl font-bold text-white">$500 FLAT</div>
+                                    <div class="text-sm text-gray-400 mt-1">Full Pro Access</div>
+                                    <div class="text-gridiron-accent font-semibold mt-2">$500</div>
+                                    <div class="text-xs text-gray-500">Save $800</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <button onclick="bookNow()" class="w-full bg-gridiron-primary hover:bg-gridiron-dark text-white py-4 rounded-lg text-xl font-bold transition pulse-glow">
+                            Book Now - Lock Your Spot →
+                        </button>
+                        
+                        <div class="text-center text-sm text-gray-400 mt-3">
+                            ⏰ Only 5 spots • $250 security deposit to reserve
+                        </div>
+                    </div>
+
+                    <!-- Quick Features -->
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-2xl font-bold text-gridiron-accent">24/7</div>
+                            <div class="text-xs text-gray-400">Human Support</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-gridiron-accent">< 10min</div>
+                            <div class="text-xs text-gray-400">Film Analysis</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-gridiron-accent">2026</div>
+                            <div class="text-xs text-gray-400">Season Ready</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Product Mockup -->
+                <div class="relative">
+                    <!-- Sideline Tablet Mockup -->
+                    <div class="bg-gray-900 rounded-2xl p-4 shadow-2xl border-4 border-gray-800">
+                        <div class="bg-black rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-gridiron-accent font-bold">AI SIDELINE ASSISTANT</div>
+                                <div class="w-2 h-2 bg-gridiron-accent rounded-full animate-pulse"></div>
+                            </div>
+                            
+                            <div class="bg-gridiron-primary/20 border border-gridiron-primary rounded-lg p-4 mb-3">
+                                <div class="text-sm text-gray-400 mb-1">3rd & 7 • They're in Cover 2</div>
+                                <div class="text-white font-semibold">🎯 RUN: Shotgun Power Right</div>
+                                <div class="text-xs text-gridiron-accent mt-2">73% success rate vs Cover 2</div>
+                            </div>
+
+                            <div class="bg-blue-900/20 border border-blue-500 rounded-lg p-4 mb-3">
+                                <div class="text-sm text-gray-400 mb-1">Opponent Tendency</div>
+                                <div class="text-white font-semibold">⚠️ Blitz Expected (67%)</div>
+                                <div class="text-xs text-blue-400 mt-2">Quick slant open on left</div>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <div class="flex-1 bg-gray-800 rounded p-2 text-center">
+                                    <div class="text-xs text-gray-400">QB #12</div>
+                                    <div class="text-white font-bold">72%</div>
+                                </div>
+                                <div class="flex-1 bg-gray-800 rounded p-2 text-center">
+                                    <div class="text-xs text-gray-400">Plays Run</div>
+                                    <div class="text-white font-bold">34</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating badges -->
+                    <div class="absolute -top-4 -right-4 bg-gridiron-primary text-white px-4 py-2 rounded-full font-bold shadow-lg">
+                        AI-Powered
+                    </div>
+                    <div class="absolute -bottom-4 -left-4 bg-blue-600 text-white px-4 py-2 rounded-full font-bold shadow-lg">
+                        Real-Time
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </header>
-
-    <section id="features" class="features">
-      <h2>Features coaches actually care about</h2>
-      <div class="grid">
-        <article>
-          <h3>Instant clip creation</h3>
-          <p>Mark frames, clip, and export highlights in seconds — frame-accurate and share-ready.</p>
-        </article>
-        <article>
-          <h3>Advanced tagging</h3>
-          <p>Customize tags (plays, personnel, tendencies) and filter film instantly.</p>
-        </article>
-        <article>
-          <h3>Secure sharing</h3>
-          <p>Team-level control, no public leak, recruiter permissions you control.</p>
-        </article>
-        <article>
-          <h3>Recruiting export</h3>
-          <p>One-click highlight reel ready for college programs and scouts.</p>
-        </article>
-      </div>
     </section>
 
-    <section id="get-started" class="signup">
-      <div class="signup-inner">
-        <h2>Get on the field. Get on the beta.</h2>
-        <p>We’re onboarding a small set of coaches to start — sign up and we’ll set your team up fast.</p>
-        <form id="signup-form" class="form">
-          <input name="name" placeholder="Your name" required />
-          <input name="email" placeholder="Email" type="email" required />
-          <input name="team" placeholder="Team / School" />
-          <button class="btn" type="submit">Request access</button>
-        </form>
-        <p class="small">We won't sell your data. We don't do ads. We build tools coaches actually use.</p>
-      </div>
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold mb-4">
+                    Features That <span class="text-gridiron-accent">Win Games</span>
+                </h2>
+                <p class="text-xl text-gray-400">Everything your program needs to dominate</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-black p-8 rounded-xl border border-gray-800 hover:border-gridiron-primary transition">
+                    <div class="text-5xl mb-4">🎯</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gridiron-accent">Sideline Play Suggestions</h3>
+                    <p class="text-gray-400 mb-4">AI analyzes opponent tendencies in real-time and suggests plays with success rates. Know what to run before you call timeout.</p>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Real-time analysis</div>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Success probability scoring</div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-black p-8 rounded-xl border border-gray-800 hover:border-gridiron-primary transition">
+                    <div class="text-5xl mb-4">👥</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gridiron-accent">Player Logins & Training</h3>
+                    <p class="text-gray-400 mb-4">Each player gets personalized drills, opponent clips, and areas to improve before Friday night. They know exactly what to work on.</p>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Individual player accounts</div>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Custom practice guidance</div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-black p-8 rounded-xl border border-gray-800 hover:border-gridiron-primary transition">
+                    <div class="text-5xl mb-4">📊</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gridiron-accent">Tendency Prediction</h3>
+                    <p class="text-gray-400 mb-4">Know what they'll run on 3rd & long before they snap it. AI learns opponent patterns and predicts their next move.</p>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Formation prediction</div>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Down & distance analysis</div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-black p-8 rounded-xl border border-gray-800 hover:border-gridiron-primary transition">
+                    <div class="text-5xl mb-4">🎨</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gridiron-accent">Name Your AI + Team Colors</h3>
+                    <p class="text-gray-400 mb-4">Customize everything. Name your AI assistant. Apply your team colors. Your brand, not ours.</p>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Custom AI naming</div>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Team branding throughout</div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-black p-8 rounded-xl border border-gray-800 hover:border-gridiron-primary transition">
+                    <div class="text-5xl mb-4">⭐</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gridiron-accent">Recruiting-Ready Highlights</h3>
+                    <p class="text-gray-400 mb-4">AI automatically creates professional highlight reels for each player. Share directly with college coaches.</p>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Auto-generated highlights</div>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ One-click college sharing</div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-black p-8 rounded-xl border border-gray-800 hover:border-gridiron-primary transition">
+                    <div class="text-5xl mb-4">🎧</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gridiron-accent">24/7 Human Support</h3>
+                    <p class="text-gray-400 mb-4">Real humans, not bots. Call, text, or email anytime. We answer. Period.</p>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Phone: (901) 206-4598</div>
+                    <div class="text-sm text-gridiron-primary font-semibold">✓ Email: gridiron-intel2025@protonmail.com</div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <footer class="footer">
-      <div>
-        <strong>gridiron</strong> — built by coaches • © <span id="year"></span>
-      </div>
-      <div>
-        <a href="https://github.com/pixellogic-tech/gridiron-intel-landing" target="_blank" rel="noopener">GitHub</a>
-      </div>
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-black">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold mb-4">
+                    Simple <span class="text-gridiron-accent">Pricing</span>
+                </h2>
+                <p class="text-xl text-gray-400">Built for high school budgets</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <!-- Free -->
+                <div class="bg-gray-900 border-2 border-gray-800 rounded-xl p-8 hover:border-gridiron-primary transition">
+                    <div class="text-4xl mb-4">🏈</div>
+                    <h3 class="text-2xl font-bold mb-2">Free</h3>
+                    <div class="text-4xl font-bold text-gridiron-accent mb-4">$0</div>
+                    <p class="text-gray-400 mb-6">Up to 5 players</p>
+                    <ul class="space-y-3 text-sm mb-8">
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Limited film storage</li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Basic breakdowns</li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Test the system</li>
+                    </ul>
+                    <button onclick="bookNow('free')" class="w-full bg-gray-800 hover:bg-gray-700 text-white py-3 rounded-lg font-semibold transition">
+                        Start Free
+                    </button>
+                </div>
+
+                <!-- Varsity -->
+                <div class="bg-gray-900 border-2 border-gray-800 rounded-xl p-8 hover:border-gridiron-primary transition">
+                    <div class="text-4xl mb-4">🏈</div>
+                    <h3 class="text-2xl font-bold mb-2">Varsity</h3>
+                    <div class="text-4xl font-bold text-gridiron-accent mb-4">$700<span class="text-lg text-gray-400">/season</span></div>
+                    <p class="text-gray-400 mb-6">High School Teams</p>
+                    <ul class="space-y-3 text-sm mb-8">
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Unlimited film</li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Deep analysis</li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Team dashboards</li>
+                    </ul>
+                    <button onclick="bookNow('varsity')" class="w-full bg-gridiron-primary hover:bg-gridiron-dark text-white py-3 rounded-lg font-semibold transition">
+                        Select Plan
+                    </button>
+                </div>
+
+                <!-- Elite -->
+                <div class="bg-gray-900 border-2 border-gray-800 rounded-xl p-8 hover:border-gridiron-primary transition">
+                    <div class="text-4xl mb-4">🏈</div>
+                    <h3 class="text-2xl font-bold mb-2">Elite</h3>
+                    <div class="text-4xl font-bold text-gridiron-accent mb-4">$1,000<span class="text-lg text-gray-400">/season</span></div>
+                    <p class="text-gray-400 mb-6">Jr High + High School</p>
+                    <ul class="space-y-3 text-sm mb-8">
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Complete analytics</li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>All-team access</li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Full program coverage</li>
+                    </ul>
+                    <button onclick="bookNow('elite')" class="w-full bg-gridiron-primary hover:bg-gridiron-dark text-white py-3 rounded-lg font-semibold transition">
+                        Select Plan
+                    </button>
+                </div>
+
+                <!-- Pro -->
+                <div class="bg-gridiron-primary/10 border-2 border-gridiron-primary rounded-xl p-8 transform scale-105 relative pulse-glow">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gridiron-accent text-black px-4 py-1 rounded-full text-sm font-bold">
+                        MOST POPULAR
+                    </div>
+                    <div class="text-4xl mb-4">🏈</div>
+                    <h3 class="text-2xl font-bold mb-2">Pro</h3>
+                    <div class="text-4xl font-bold text-gridiron-accent mb-4">$1,300<span class="text-lg text-gray-400">/season</span></div>
+                    <p class="text-gray-400 mb-6">Full Arsenal</p>
+                    <ul class="space-y-3 text-sm mb-8">
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span><strong>Full AI assistant</strong></li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span><strong>Play prediction</strong></li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Player training insights</li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>24/7 support</li>
+                        <li class="flex items-start"><span class="text-gridiron-accent mr-2">✓</span>Sideline tools</li>
+                    </ul>
+                    <button onclick="bookNow('pro')" class="w-full bg-gridiron-accent hover:bg-green-500 text-black py-3 rounded-lg font-bold transition">
+                        Get Pro Access
+                    </button>
+                </div>
+            </div>
+
+            <!-- Early Bird Deal -->
+            <div class="max-w-4xl mx-auto bg-gradient-to-r from-gridiron-primary/20 to-blue-500/20 border-2 border-gridiron-primary rounded-2xl p-8 md:p-12">
+                <div class="text-center mb-8">
+                    <div class="inline-block bg-gridiron-accent text-black px-6 py-2 rounded-full font-bold mb-4 animate-pulse">
+                        🔥 EARLY ACCESS - FIRST 5 TEAMS ONLY
+                    </div>
+                    <h3 class="text-3xl md:text-5xl font-bold mb-4">Lock In Your Championship Advantage</h3>
+                    <p class="text-xl text-gray-300">$250 security deposit • Choose your bonus • Reserve your spot for 2026</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-black/50 rounded-xl p-6 border border-gridiron-primary/50">
+                        <div class="text-4xl mb-3">💰</div>
+                        <h4 class="text-2xl font-bold text-gridiron-accent mb-2">35% OFF</h4>
+                        <div class="text-lg mb-4">First Season Discount</div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between"><span>Pro Plan:</span><strong class="text-gridiron-accent">$845</strong></div>
+                            <div class="flex justify-between"><span>Elite Plan:</span><strong class="text-gridiron-accent">$650</strong></div>
+                            <div class="flex justify-between"><span>Varsity Plan:</span><strong class="text-gridiron-accent">$455</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/50 rounded-xl p-6 border-2 border-gridiron-accent pulse-glow relative">
+                        <div class="absolute -top-3 -right-3 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold rotate-12">
+                            BEST DEAL
+                        </div>
+                        <div class="text-4xl mb-3">🚀</div>
+                        <h4 class="text-2xl font-bold text-gridiron-accent mb-2">$500 UPFRONT</h4>
+                        <div class="text-lg mb-4">Full Pro Package</div>
+                        <div class="space-y-2">
+                            <div><strong class="text-gridiron-accent">Save $800</strong> from regular price</div>
+                            <div>✓ All Pro features unlocked</div>
+                            <div>✓ Priority onboarding</div>
+                            <div>✓ Instant access</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="bookNow()" class="w-full mt-8 bg-gridiron-accent hover:bg-green-500 text-black py-5 rounded-xl text-2xl font-bold transition shadow-xl">
+                    Book Now & Lock Your Spot →
+                </button>
+                
+                <div class="text-center text-sm text-gray-400 mt-4">
+                    ⏰ Only 5 spots available • Secure with $250 deposit • First come, first served
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact/Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <div class="text-2xl font-bold text-gridiron-primary mb-4">🏈 Gridiron Intel</div>
+                    <p class="text-gray-400">AI-powered football analytics built for the 2026 season</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact Us</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <div>📞 <a href="tel:+19012064598" class="hover:text-gridiron-accent">(901) 206-4598</a></div>
+                        <div>📧 <a href="mailto:gridiron-intel2025@protonmail.com" class="hover:text-gridiron-accent">gridiron-intel2025@protonmail.com</a></div>
+                        <div>24/7 Support Available</div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <div class="space-y-2">
+                        <div><a href="dashboard.html" class="text-gray-400 hover:text-gridiron-accent">Coach Dashboard</a></div>
+                        <div><a href="#features" class="text-gray-400 hover:text-gridiron-accent">Features</a></div>
+                        <div><a href="#pricing" class="text-gray-400 hover:text-gridiron-accent">Pricing</a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                © 2024 Gridiron Intel. Ready for 2026 season. 🏈
+            </div>
+        </div>
     </footer>
-  </main>
 
-  <script src="script.js"></script>
+    <script>
+        // Book Now Functionality
+        function bookNow(plan = 'early-bird') {
+            const pricing = document.querySelector('input[name="pricing"]:checked')?.value || 'discount';
+            const amount = pricing === 'discount' ? '$845 (35% off)' : '$500 upfront';
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-gray-900 p-8 rounded-2xl max-w-lg w-full border-2 border-gridiron-primary">
+                    <h3 class="text-3xl font-bold text-gridiron-accent mb-4">Reserve Your Spot</h3>
+                    <p class="text-gray-300 mb-6">Selected: ${plan.toUpperCase()} • ${amount}</p>
+                    
+                    <form id="booking-form" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-400 text-sm mb-2">Name *</label>
+                            <input type="text" required class="w-full p-3 bg-black border border-gray-700 rounded text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 text-sm mb-2">Email *</label>
+                            <input type="email" required class="w-full p-3 bg-black border border-gray-700 rounded text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 text-sm mb-2">Phone *</label>
+                            <input type="tel" required class="w-full p-3 bg-black border border-gray-700 rounded text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 text-sm mb-2">School/Team *</label>
+                            <input type="text" required class="w-full p-3 bg-black border border-gray-700 rounded text-white">
+                        </div>
+                        <div class="flex gap-3 pt-4">
+                            <button type="submit" class="flex-1 bg-gridiron-accent hover:bg-green-500 text-black py-3 rounded-lg font-bold transition">
+                                Submit ($250 Deposit)
+                            </button>
+                            <button type="button" onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg font-semibold transition">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            modal.querySelector('#booking-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you! We will contact you within 24 hours to process your $250 deposit and lock in your spot.\\n\\nContact: (901) 206-4598 or gridiron-intel2025@protonmail.com');
+                modal.remove();
+            });
+            
+            document.body.appendChild(modal);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        console.log('🏈 Gridiron Intel - All systems go!');
+    </script>
+
 </body>
 </html>
+EOFINDEX
+
+echo "✅ Landing page complete!"
