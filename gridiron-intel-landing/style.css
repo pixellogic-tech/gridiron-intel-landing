@@ -1,0 +1,33 @@
+:root{
+  --bg:#0b0f14; --panel:#0f1720; --muted:#9aa7b2; --accent:#ffb703;
+  --accent-2:#16a34a; --glass: rgba(255,255,255,0.03); --radius:12px;
+  --max:1100px; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+*{box-sizing:border-box} body{margin:0; background:linear-gradient(180deg,var(--bg),#071018 60%); color:#e6eef3; -webkit-font-smoothing:antialiased; line-height:1.45;}
+.site{max-width:var(--max);margin:0 auto;padding:24px}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#f97316);display:flex;align-items:center;justify-content:center;font-weight:700;color:#061019;font-size:20px;box-shadow:0 6px 18px rgba(0,0,0,0.45);}
+.title{font-weight:700;font-size:18px;letter-spacing:0.5px}
+.nav-actions{display:flex;gap:12px;align-items:center}
+.btn{background:var(--accent);color:#061019;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:600;border:none;cursor:pointer}
+.btn:hover{filter:brightness(1.03)}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 12px}
+.hero{margin-bottom:40px;text-align:center}
+.hero h1{font-size:38px;margin-bottom:12px}
+.lede{color:var(--muted);margin-bottom:18px;font-size:15px}
+.features{padding:28px 0}
+.features h2{text-align:center;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.grid article{background:rgba(255,255,255,0.02);padding:18px;border-radius:var(--radius)}
+.pricing{padding:28px 0}
+.pricing h2{text-align:center;margin-bottom:20px}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.plan{background:var(--panel);padding:20px;border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.plan .price{font-size:24px;font-weight:700;color:var(--accent)}
+.plan .early-bird{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.signup{padding:28px 0;background:var(--panel);border-radius:var(--radius);margin-top:28px;text-align:center}
+.signup input, .signup select{width:90%;padding:10px;margin:6px 0;border-radius:var(--radius);border:none;background:var(--glass);color:#fff;}
+.signup button{margin-top:12px}
+.footer{display:flex;justify-content:space-between;padding:14px 0;font-size:13px;color:var(--muted)}
+.large{font-size:16px;padding:14px 18px}
